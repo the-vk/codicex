@@ -11,10 +11,10 @@ cd codicex
 mise trust
 mise install
 mise exec -- npm ci
-mise exec -- npm run build
+mise exec -- npm run build -- /path/to/blog
 ```
 
-Pass source directory with `mise exec -- npm run build -- /path/to/blog`. The build **replaces `local-blog/dist`**. Publish the entire `dist` directory to a static HTTP server. For a local preview, run `cd dist && python3 -m http.server 8000` and open `http://localhost:8000/`. Browsers cannot fetch the files using `file://`.
+The installed package also provides `codicex /path/to/blog`. Running `codicex` without arguments displays usage. The build **replaces the package's `dist` directory**. Publish the entire `dist` directory to a static HTTP server. For a local preview, run `cd dist && python3 -m http.server 8000` and open `http://localhost:8000/`. Browsers cannot fetch the files using `file://`.
 
 The compiler reads front matter and configuration, creates `manifest.json`, copies Markdown, images, and the Liquid templates, and bundles the app. It creates an HTML entry point for every known route, so direct links and refreshes work on ordinary static hosts, including under a subdirectory. Rebuild after changing source files or templates.
 
@@ -33,4 +33,4 @@ mise exec -- npm run typecheck
 mise exec -- npm test
 ```
 
-The browser test uses Google Chrome at its macOS default path; set `CHROME_PATH` to a Chromium executable elsewhere. It skips if no executable is available. The test builds the blog first.
+The browser test uses Google Chrome at its macOS default path; set `CHROME_PATH` to a Chromium executable elsewhere. It skips if no executable is available. Build the blog before running the browser test.

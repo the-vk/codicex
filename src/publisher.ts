@@ -7,7 +7,6 @@ import { fileURLToPath } from "node:url";
 import type { Document, Manifest } from "./types";
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const source = path.resolve(process.argv[2]);
 const output = path.join(project, "dist");
 const markdown = /\.(md|markdown)$/i;
 
@@ -35,7 +34,8 @@ function safeRoute(route: string): string {
   return route;
 }
 
-async function main() {
+export async function publish(sourceDirectory: string) {
+  const source = path.resolve(sourceDirectory);
   const config = parseYaml(await readFile(path.join(source, "_config.yml"), "utf8")) ?? {};
   const nav = parseYaml(await readFile(path.join(source, "_data/navigation.yml"), "utf8")) ?? {};
   const posts: Document[] = [];
@@ -115,5 +115,3 @@ async function main() {
   }
   console.log(`Built ${posts.length} posts and ${pages.length} pages into ${output}`);
 }
-
-main().catch(error => { console.error(error); process.exitCode = 1; });

@@ -3,22 +3,25 @@
   "version": "0.1.0",
   "private": false,
   "type": "module",
+  "bin": {
+    "codicex": "./bin/codicex"
+  },
   "scripts": {
-    "build": "tsx src/build.ts",
+    "build": "node bin/codicex",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --import tsx --test tests/*.test.ts"
+    "test": "node --test test/*.test.js && node --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
+    "esbuild": "^0.25.0",
     "gray-matter": "^4.0.3",
     "liquidjs": "^10.21.1",
     "marked": "^15.0.12",
+    "tsx": "^4.19.0",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
-    "esbuild": "^0.25.0",
     "playwright-core": "^1.52.0",
-    "tsx": "^4.19.0",
     "typescript": "^5.8.0"
   }
 }
