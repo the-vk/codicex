@@ -27,17 +27,10 @@ test("the executable shows usage and publishes a source directory", async t => {
   assert.match(help.stdout, /Usage: codicex <source-directory> \[--output <directory>\]/);
   await assert.rejects(stat(path.join(temp, "dist")), { code: "ENOENT" });
 
-  await mkdir(path.join(source, "_data"), { recursive: true });
-  await mkdir(path.join(source, "_posts"));
-  await mkdir(path.join(source, "assets"));
-  await writeFile(path.join(source, "_config.yml"), "title: Test Blog\n");
-  await writeFile(path.join(source, "_data/navigation.yml"), "main: []\n");
-  await writeFile(path.join(source, "index.html"), "---\nlayout: home\n---\n");
-  await writeFile(path.join(source, "favicon.png"), "favicon");
-  await writeFile(path.join(source, "_posts/2026-01-02-example.md"), "---\ntitle: Example\n---\nHello\n");
+  await cp(path.join(root, "tests/test-data"), source, { recursive: true });
 
   const result = await exec(cli, [source], { cwd: temp });
-  assert.match(result.stdout, /Built 1 posts and 1 pages/);
+  assert.match(result.stdout, /Built 1 posts and 5 pages/);
   const manifest = JSON.parse(await readFile(path.join(temp, "dist/manifest.json"), "utf8"));
   assert.equal(manifest.site.title, "Test Blog");
   assert.equal(manifest.posts[0].url, "/2026/01/02/example.html");

@@ -33,4 +33,4 @@ mise exec -- npm run typecheck
 mise exec -- npm test
 ```
 
-The browser test uses Google Chrome at its macOS default path; set `CHROME_PATH` to a Chromium executable elsewhere. It skips if no executable is available. Build the blog before running the browser test.
+The browser test builds the shared test fixture in a temporary directory and uses Google Chrome at its macOS default path; set `CHROME_PATH` to a Chromium executable elsewhere. It skips if no executable is available.
