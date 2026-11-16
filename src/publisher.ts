@@ -1,13 +1,12 @@
 import { build } from "esbuild";
 import matter from "gray-matter";
 import { parse as parseYaml } from "yaml";
-import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, realpath, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Document, Manifest } from "./types";
 
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const output = path.join(project, "dist");
 const markdown = /\.(md|markdown)$/i;
 
 async function files(dir: string): Promise<string[]> {
@@ -34,8 +33,19 @@ function safeRoute(route: string): string {
   return route;
 }
 
-export async function publish(sourceDirectory: string) {
+export async function publish(sourceDirectory: string, output: string) {
+  if (!path.isAbsolute(output)) throw new Error("Output directory must be an absolute path");
   const source = path.resolve(sourceDirectory);
+  const resolvedOutput = await realpath(output).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return output;
+    throw error;
+  });
+  for (const protectedDirectory of [source, project, process.cwd()]) {
+    const relative = path.relative(resolvedOutput, await realpath(protectedDirectory));
+    if (!relative || (!relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative))) {
+      throw new Error(`Output directory cannot contain the source, package, or working directory: ${output}`);
+    }
+  }
   const config = parseYaml(await readFile(path.join(source, "_config.yml"), "utf8")) ?? {};
   const nav = parseYaml(await readFile(path.join(source, "_data/navigation.yml"), "utf8")) ?? {};
   const posts: Document[] = [];

@@ -1,15 +1,27 @@
 #!/usr/bin/env node
 
+import { parseArgs } from "node:util";
+import path from "node:path";
+
 async function main() {
-  const source = process.argv[2];
-  if (!source || source === "--help" || source === "-h") {
-    console.log("Usage: codicex <source-directory>");
+  const { values, positionals } = parseArgs({
+    options: {
+      output: { type: "string" },
+      help: { type: "boolean", short: "h" }
+    },
+    allowPositionals: true
+  });
+  if (values.help || process.argv.length === 2) {
+    console.log("Usage: codicex <source-directory> [--output <directory>]");
     return;
   }
+  if (positionals.length !== 1) throw new Error("Provide exactly one source directory");
+  if (values.output !== undefined && !values.output.trim()) throw new Error("--output requires a directory");
 
   const { tsImport } = await import("tsx/esm/api");
   const { publish } = await tsImport("../src/publisher.ts", import.meta.url);
-  await publish(source);
+  const output = path.resolve(values.output ?? "dist");
+  await publish(positionals[0], output);
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });
