@@ -1,0 +1,9 @@
+<h1>{{ page.title | escape }}</h1>
+<h2 class="section-title">Recent posts</h2>
+{% for post in posts %}
+<article class="post-preview">
+  <h2><a href="{{ post.url | local_url | escape }}">{{ post.title | escape }}</a></h2>
+  <p class="date">{{ post.display_date | escape }}</p>
+  <div data-markdown>{{ post.excerpt }}</div>
+</article>
+{% endfor %}

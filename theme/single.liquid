@@ -1,0 +1,7 @@
+<article>
+  <h1>{{ page.title | escape }}</h1>
+  <p class="date">{{ page.display_date | escape }}</p>
+  <div class="prose" data-markdown>{{ content }}</div>
+  {% if page.categories.size > 0 %}<p><strong>Categories:</strong> {{ page.categories | join: ', ' | escape }}</p>{% endif %}
+  {% if page.tags.size > 0 %}<p><strong>Tags:</strong> {{ page.tags | join: ', ' | escape }}</p>{% endif %}
+</article>

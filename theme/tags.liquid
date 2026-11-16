@@ -1,0 +1,6 @@
+<h1>{{ page.title | escape }}</h1>
+{% for group in groups %}
+<section><h2>{{ group.name | escape }}</h2>
+{% for post in group.posts %}<article class="archive-item"><h3><a href="{{ post.url | local_url | escape }}">{{ post.title | escape }}</a></h3><span class="date">{{ post.display_date | escape }}</span></article>{% endfor %}
+</section>
+{% endfor %}

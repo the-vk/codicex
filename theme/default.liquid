@@ -1,0 +1,18 @@
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="brand" href="{{ '/' | local_url | escape }}">{{ site.title | escape }}</a>
+    <nav aria-label="Main navigation">
+      {% for item in navigation %}<a href="{{ item.url | local_url | escape }}">{{ item.title | escape }}</a>{% endfor %}
+    </nav>
+  </div>
+</header>
+<div class="page">
+  <aside class="author">
+    <strong>{{ site.author.name | escape }}</strong>
+    <p>{{ site.author.bio | escape }}</p>
+    <p>{{ site.author.location | escape }}</p>
+    {% for link in site.author.links %}<a href="{{ link.url | escape }}">{{ link.label | escape }}</a>{% endfor %}
+  </aside>
+  <main id="main">{{ content }}</main>
+</div>
+<footer><div>&copy; {{ site.author.name | escape }}. {{ site.description | escape }}</div></footer>

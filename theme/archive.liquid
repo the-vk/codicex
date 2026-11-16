@@ -1,0 +1,4 @@
+<h1>{{ page.title | escape }}</h1>
+{% for item in pages %}
+<article class="archive-item"><h2><a href="{{ item.url | local_url | escape }}">{{ item.title | escape }}</a></h2></article>
+{% endfor %}
